@@ -45,6 +45,7 @@ the passed function returns some value other than:
 * `false`
 * `:error`
 * a tuple starting with `:error`
+
 Otherwise, it will either raise a `Liveness` exception or reraise the last
 exception raised by the function.
 
