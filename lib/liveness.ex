@@ -45,7 +45,7 @@ defmodule Liveness do
 
     try do
       case f.() do
-        x when is_nil(x) or false == x ->
+        x when is_nil(x) or false == x or :error == x or (is_tuple(x) and elem(x, 0) == :error) ->
           sleep_remaining(started_at, interval)
           exception = %__MODULE__{message: "function returned #{inspect(x)}"}
           eventually(f, tries - 1, interval, exception, nil)

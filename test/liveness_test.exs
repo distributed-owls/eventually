@@ -6,6 +6,8 @@ defmodule LivenessTest do
   test "it returns value immediately if fun neither returns false nor raises" do
     assert eventually(fn -> 123 end) == 123
     assert eventually(fn -> :ok end) == :ok
+    assert eventually(fn -> {:ok, 123} end) == {:ok, 123}
+    assert eventually(fn -> {:ok, 123, 456} end) == {:ok, 123, 456}
     assert eventually(fn -> "foo" end) == "foo"
   end
 
@@ -18,6 +20,22 @@ defmodule LivenessTest do
   test "it raises an exception if fun returns nil" do
     assert_raise Liveness, "function returned nil", fn ->
       eventually(fn -> nil end, 2, 20)
+    end
+  end
+
+  test "it raises an exception if fun returns :error" do
+    assert_raise Liveness, "function returned :error", fn ->
+      eventually(fn -> :error end, 2, 20)
+    end
+  end
+
+  test "it raises an exception if fun returns a tuple with :error as the first element" do
+    assert_raise Liveness, ~s(function returned {:error, "Something went wrong"}), fn ->
+      eventually(fn -> {:error, "Something went wrong"} end, 2, 20)
+    end
+
+    assert_raise Liveness, ~s(function returned {:error, "Something went wrong", :server_error}), fn ->
+      eventually(fn -> {:error, "Something went wrong", :server_error} end, 2, 20)
     end
   end
 
