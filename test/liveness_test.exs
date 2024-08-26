@@ -34,9 +34,11 @@ defmodule LivenessTest do
       eventually(fn -> {:error, "Something went wrong"} end, 2, 20)
     end
 
-    assert_raise Liveness, ~s(function returned {:error, "Something went wrong", :server_error}), fn ->
-      eventually(fn -> {:error, "Something went wrong", :server_error} end, 2, 20)
-    end
+    assert_raise Liveness,
+                 ~s(function returned {:error, "Something went wrong", :server_error}),
+                 fn ->
+                   eventually(fn -> {:error, "Something went wrong", :server_error} end, 2, 20)
+                 end
   end
 
   test "it raises an exception that fun raises" do
