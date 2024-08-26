@@ -39,10 +39,14 @@ proceed_with(user_id)
 
 ## Semantics
 
-The call to `eventually` will succeed if the passed function returns some value
-other than `false` within the provided number of retries.  Otherwise, it will
-either raise a `Liveness` exception or reraise the last exception raised by the
-function.
+The call to `eventually` will succeed within the provided number of retries if
+the passed function returns some value other than:
+
+* `false`
+* `:error`
+* a tuple starting with `:error`
+Otherwise, it will either raise a `Liveness` exception or reraise the last
+exception raised by the function.
 
 By default, `eventually` will attempt to execute the function 250 times, every
 20 milliseconds. Both parameters can be altered by passing them to

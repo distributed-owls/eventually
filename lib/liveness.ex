@@ -16,13 +16,14 @@ defmodule Liveness do
   milliseconds, the next try will be attempted immediately after `f` returns.
 
   A function is deemed to have failed if it returns `false` or `nil` (a falsy
-  value), or if it crashes (exits, raises, or `:erlang.error`s out).
+  value), `:error` or a tuple starting with `:error`, or if it crashes (exits,
+  raises, or `:erlang.error`s out).
 
   If the function returns successfully, its return value becomes the value of
   the call to `eventually`.
 
-  If the function returns a falsy value (`false` or `nil`) upon the last try,
-  then the `Liveness` exception is raised.
+  If the function fails upon the last try, then the `Liveness` exception is
+  raised.
 
   If the function raises an exception upon the last try, this exception is
   re-raised by `eventually` with the *original* stacktrace.
